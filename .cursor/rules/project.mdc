@@ -1,0 +1,430 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+#  Food App - Project Rules & Conventions
+
+##  Project Overview
+
+**Food App** là một ứng dụng web hiện đại được xây dựng bằng Next.js 15 với App Router, cung cấp trải nghiệm khám phá ẩm thực tuyệt vời. Dự án tuân thủ kiến trúc component-based với server-side rendering và static generation.
+
+### Mục tiêu dự án
+- Tạo nền tảng chia sẻ và khám phá món ăn
+- Cung cấp giao diện người dùng thân thiện và responsive
+- Tối ưu hiệu suất với Next.js App Router
+- Xây dựng kiến trúc code sạch và dễ bảo trì
+
+##  Kiến trúc dự án
+
+### Cấu trúc thư mục
+```
+food-app/
+├── public/                    # Tài nguyên tĩnh
+│   ├── images/               # Hình ảnh món ăn
+│   └── icons/                # Icon và logo
+├── src/
+│   └── app/                  # Next.js App Router
+│       ├── components/       # Reusable components
+│       │   └── main-header/  # Header component với sub-components
+│       ├── meals/            # Trang danh sách món ăn
+│       ├── community/        # Trang cộng đồng
+│       ├── layout.js         # Root layout
+│       ├── page.js           # Trang chủ
+│       ├── globals.css       # Global styles
+│       └── page.module.css   # Homepage styles
+└── package.json              # Dependencies và scripts
+```
+
+### Công nghệ sử dụng
+- **Framework**: Next.js 15.3.4 (App Router)
+- **Frontend**: React 19.0.0
+- **Styling**: CSS Modules
+- **Development**: Turbopack
+- **Linting**: ESLint với Next.js config
+- **Git Hooks**: Husky
+
+##  Coding Standards
+
+### File Naming Conventions
+- **Components**: `kebab-case` (e.g., `main-header.js`, `meal-card.js`)
+- **CSS Modules**: `kebab-case.module.css` (e.g., `main-header.module.css`)
+- **Pages**: `page.js` (Next.js App Router convention)
+- **Directories**: `kebab-case` (e.g., `main-header/`, `meal-details/`)
+
+### Code Naming Conventions
+- **Components**: `PascalCase` (e.g., `MainHeader`, `MealCard`)
+- **Functions**: `camelCase` (e.g., `getMealData`, `handleSubmit`)
+- **Constants**: `UPPER_SNAKE_CASE` (e.g., `API_ENDPOINTS`, `MEAL_TYPES`)
+- **CSS Classes**: `kebab-case` (e.g., `header-background`, `meal-card`)
+
+### Component Structure
+```javascript
+// Template cho component mới
+import classes from './component-name.module.css'
+
+const ComponentName = ({ prop1, prop2 }) => {
+  return (
+    <div className={classes.container}>
+      {/* Component content */}
+    </div>
+  )
+}
+
+export default ComponentName
+```
+
+### CSS Module Conventions
+```css
+/* component-name.module.css */
+.container {
+  /* Main container styles */
+}
+
+.container:hover {
+  /* Hover states */
+}
+
+.container .child-element {
+  /* Nested selectors */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    /* Mobile styles */
+  }
+}
+```
+
+##  Design System
+
+### Màu sắc chủ đạo
+```css
+:root {
+  --primary-color: #f4ce14;      /* Vàng ấm */
+  --secondary-color: #495e57;    /* Xanh lá đậm */
+  --background-color: #ffffff;   /* Trắng */
+  --text-color: #333333;         /* Xám đậm */
+  --accent-color: #8f3a09;       /* Cam đậm */
+  --light-gray: #f5f5f5;         /* Xám nhạt */
+}
+```
+
+### Typography
+- **Font chính**: Geist (tối ưu bởi Next.js)
+- **Font weights**: 400 (normal), 600 (semibold), 700 (bold)
+- **Line heights**: 1.5 (body), 1.2 (headings)
+
+### Spacing System
+```css
+:root {
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+}
+```
+
+## 🔧 Development Workflow
+
+### Scripts có sẵn
+```json
+{
+  "dev": "next dev --turbopack",    // Development với Turbopack
+  "build": "next build",            // Build production
+  "start": "next start",            // Chạy production server
+  "lint": "next lint"               // Kiểm tra code quality
+}
+```
+
+### Git Workflow
+- **Branch naming**: `feature/description`, `bugfix/description`
+- **Commit convention**: Conventional Commits
+  - `feat:` - New features
+  - `fix:` - Bug fixes
+  - `docs:` - Documentation
+  - `style:` - Code style changes
+  - `refactor:` - Code refactoring
+  - `test:` - Adding tests
+  - `chore:` - Maintenance tasks
+
+### Pre-commit Hooks
+- ESLint checking
+- Code formatting
+- Type checking (nếu sử dụng TypeScript)
+
+## 📱 Responsive Design
+
+### Breakpoints
+```css
+/* Mobile first approach */
+/* Base styles for mobile */
+
+/* Tablet */
+@media (min-width: 768px) {
+  /* Tablet styles */
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  /* Desktop styles */
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  /* Large desktop styles */
+}
+```
+
+### Component Responsive Patterns
+```css
+.container {
+  padding: var(--spacing-md);
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: var(--spacing-lg);
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+```
+
+## 🚀 Performance Best Practices
+
+### Next.js Optimizations
+- Sử dụng `next/image` cho image optimization
+- Sử dụng `next/font` cho font optimization
+- Implement proper loading states
+- Use Server Components khi có thể
+- Implement proper caching strategies
+
+### Code Splitting
+```javascript
+// Dynamic imports cho code splitting
+import dynamic from 'next/dynamic'
+
+const DynamicComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false
+})
+```
+
+### Bundle Optimization
+- Tree shaking tự động
+- Lazy loading cho components
+- Optimize third-party libraries
+- Monitor bundle size
+
+##  Testing Strategy
+
+### Unit Testing
+- Jest + React Testing Library
+- Test components và utility functions
+- Mock external dependencies
+- Test user interactions
+
+### Integration Testing
+- Test component interactions
+- Test data flow
+- Test API integrations
+
+### E2E Testing
+- Playwright hoặc Cypress
+- Test user journeys
+- Cross-browser testing
+
+## 🔒 Security Best Practices
+
+### Input Validation
+- Validate tất cả user inputs
+- Sanitize data trước khi render
+- Use proper HTML escaping
+
+### Environment Variables
+```javascript
+// .env.local
+NEXT_PUBLIC_API_URL=https://api.example.com
+DATABASE_URL=your_database_url
+SECRET_KEY=your_secret_key
+```
+
+### Security Headers
+```javascript
+// next.config.mjs
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ]
+  },
+}
+```
+
+## 📊 Monitoring & Analytics
+
+### Performance Monitoring
+- Core Web Vitals tracking
+- Bundle size monitoring
+- Error tracking với Sentry
+- User experience metrics
+
+### Analytics
+- Google Analytics 4
+- Custom event tracking
+- User behavior analysis
+
+## 🎯 Common Patterns
+
+### Page Component Pattern
+```javascript
+// app/meals/page.js
+import MealList from '@/components/meals/MealList'
+import { getMeals } from '@/lib/api'
+
+export default async function MealsPage() {
+  const meals = await getMeals()
+  
+  return (
+    <main className="container">
+      <h1>Our Delicious Meals</h1>
+      <MealList meals={meals} />
+    </main>
+  )
+}
+```
+
+### Layout Component Pattern
+```javascript
+// app/layout.js
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata = {
+  title: 'Food App - Discover Amazing Meals',
+  description: 'Explore delicious recipes and food experiences',
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        {children}
+      </body>
+    </html>
+  )
+}
+```
+
+### Component Composition Pattern
+```javascript
+// components/meals/MealCard.js
+import classes from './MealCard.module.css'
+import Image from 'next/image'
+
+const MealCard = ({ meal }) => {
+  return (
+    <article className={classes.card}>
+      <div className={classes.imageContainer}>
+        <Image 
+          src={meal.image} 
+          alt={meal.name}
+          width={300}
+          height={200}
+          className={classes.image}
+        />
+      </div>
+      <div className={classes.content}>
+        <h3 className={classes.title}>{meal.name}</h3>
+        <p className={classes.description}>{meal.description}</p>
+      </div>
+    </article>
+  )
+}
+
+export default MealCard
+```
+
+##  State Management
+
+### Local State
+- Use React hooks (`useState`, `useEffect`)
+- Custom hooks cho reusable logic
+- Context API cho global state
+
+### Data Fetching
+- Server Components cho initial data
+- Client Components cho interactive data
+- SWR hoặc React Query cho caching
+
+## 📈 SEO & Accessibility
+
+### SEO Best Practices
+- Proper metadata configuration
+- Structured data markup
+- Sitemap generation
+- Open Graph tags
+
+### Accessibility (a11y)
+- Semantic HTML elements
+- ARIA labels và roles
+- Keyboard navigation
+- Color contrast compliance
+- Screen reader support
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+- Automatic deployments
+- Preview deployments
+- Environment variables
+- Performance monitoring
+
+### Build Optimization
+```javascript
+// next.config.mjs
+const nextConfig = {
+  experimental: {
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+  images: {
+    domains: ['your-image-domain.com'],
+  },
+}
+```
+
+---
+
+**Lưu ý**: Project rules này sẽ được cập nhật thường xuyên khi dự án phát triển. Hãy đảm bảo tuân thủ các conventions này để maintain code quality!

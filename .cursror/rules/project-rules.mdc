@@ -1,0 +1,295 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Next.js Food App - Project Structure & Conventions
+
+## Project Overview
+This is a modern Next.js 15 food discovery application built with App Router, React 19, and CSS Modules. The project follows component-based architecture with server-side rendering and static generation capabilities.
+
+## Key Directories
+
+### Frontend (Next.js App Router)
+- **`src/app/`** - Next.js App Router pages and layouts
+  - `layout.js` - Root layout with global styles and metadata
+  - `page.js` - Homepage with hero section
+  - `meals/` - Meals listing and detail pages
+  - `globals.css` - Global CSS styles
+  - `favicon.ico` - Application icon
+
+- **`src/components/`** - Reusable React components
+  - `ui/` - Base UI components (buttons, cards, forms)
+  - `layout/` - Layout components (header, footer, navigation)
+  - `meals/` - Meal-specific components
+  - `common/` - Shared utility components
+
+- **`src/lib/`** - Utility functions and helpers
+  - `utils.js` - General utility functions
+  - `api.js` - API client and data fetching
+  - `constants.js` - Application constants
+
+- **`src/hooks/`** - Custom React hooks
+  - `useMeals.js` - Meal data management
+  - `useLocalStorage.js` - Local storage utilities
+  - `useDebounce.js` - Debounce functionality
+
+- **`src/styles/`** - CSS modules and styling
+  - `components/` - Component-specific styles
+  - `pages/` - Page-specific styles
+  - `themes/` - Theme configurations
+
+### Public Assets
+- **`public/`** - Static assets
+  - `images/` - Food images and photos
+  - `icons/` - Application icons
+  - `logo.png` - Brand logo
+
+### Configuration
+- **`package.json`** - Dependencies and scripts
+- **`next.config.mjs`** - Next.js configuration
+- **`eslint.config.mjs`** - ESLint configuration
+- **`jsconfig.json`** - JavaScript configuration
+
+## Key Files
+- `src/app/layout.js` - Root layout component
+- `src/app/page.js` - Homepage component
+- `package.json` - Project dependencies and scripts
+- `next.config.mjs` - Next.js build configuration
+- `eslint.config.mjs` - Code linting rules
+
+## Conventions
+
+### File Naming
+- Use **kebab-case** for filenames: `meal-card.js`, `hero-section.css`
+- Use **camelCase** for code: `mealCard`, `heroSection`
+- Use **PascalCase** for components: `MealCard`, `HeroSection`
+- Use **UPPER_SNAKE_CASE** for constants: `API_ENDPOINTS`, `MEAL_TYPES`
+
+### Code Organization
+- Pages should be thin - delegate logic to components and hooks
+- Components should be focused and reusable
+- Use CSS Modules for component styling
+- Implement proper prop validation
+- Follow React hooks best practices
+
+### Frontend Conventions
+- Use Next.js App Router for navigation
+- Built-in components go in `src/components/ui/`
+- Domain-specific components go in `src/components/meals/`
+- Each component should have its own CSS module
+- Use CSS Modules + global styles for styling
+- Implement responsive design with mobile-first approach
+
+### Component Structure
+- One component per file
+- Export as named export
+- Include PropTypes or JSDoc for documentation
+- Separate logic with custom hooks when needed
+
+### Styling
+- CSS Modules for component-specific styles
+- Global CSS for common styles and variables
+- Mobile-first responsive design
+- Consistent color scheme and typography
+
+### Data Fetching
+- Use Server Components for initial data loading
+- Client Components for interactive features
+- Implement proper loading and error states
+- Cache data appropriately
+
+## Common Patterns
+
+### Page Component Pattern
+```javascript
+// src/app/meals/page.js
+import MealList from '@/components/meals/MealList'
+import { getMeals } from '@/lib/api'
+
+export default async function MealsPage() {
+  const meals = await getMeals()
+  
+  return (
+    <div className="container">
+      <h1>Our Delicious Meals</h1>
+      <MealList meals={meals} />
+    </div>
+  )
+}
+```
+
+### Component Pattern
+```javascript
+// src/components/meals/MealCard.js
+import styles from './MealCard.module.css'
+import Image from 'next/image'
+
+export default function MealCard({ meal }) {
+  return (
+    <article className={styles.card}>
+      <Image 
+        src={meal.image} 
+        alt={meal.name}
+        width={300}
+        height={200}
+        className={styles.image}
+      />
+      <div className={styles.content}>
+        <h3>{meal.name}</h3>
+        <p>{meal.description}</p>
+      </div>
+    </article>
+  )
+}
+```
+
+### Layout Pattern
+```javascript
+// src/app/layout.js
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata = {
+  title: 'Food App - Discover Amazing Meals',
+  description: 'Explore delicious recipes and food experiences',
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <main>{children}</main>
+      </body>
+    </html>
+  )
+}
+```
+
+### Hook Pattern
+```javascript
+// src/hooks/useMeals.js
+import { useState, useEffect } from 'react'
+import { getMeals } from '@/lib/api'
+
+export function useMeals() {
+  const [meals, setMeals] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    async function fetchMeals() {
+      try {
+        const data = await getMeals()
+        setMeals(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMeals()
+  }, [])
+
+  return { meals, loading, error }
+}
+```
+
+### CSS Module Pattern
+```css
+/* src/components/meals/MealCard.module.css */
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 1rem;
+}
+
+.content h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.content p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+}
+```
+
+## Development Workflow
+
+### Scripts
+```json
+{
+  "dev": "next dev --turbopack",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+}
+```
+
+### Testing Strategy
+- Unit tests for utility functions
+- Component testing with React Testing Library
+- E2E testing with Playwright
+- Visual regression testing
+
+### Performance Optimization
+- Image optimization with `next/image`
+- Font optimization with `next/font`
+- Code splitting and lazy loading
+- Bundle analysis and optimization
+
+### Deployment
+- Vercel for hosting (recommended)
+- Environment variables management
+- CI/CD pipeline setup
+- Performance monitoring
+
+## Best Practices
+
+### Performance
+- Use Next.js built-in optimizations
+- Implement proper caching strategies
+- Optimize images and assets
+- Monitor Core Web Vitals
+
+### Accessibility
+- Semantic HTML structure
+- ARIA labels and roles
+- Keyboard navigation support
+- Color contrast compliance
+
+### SEO
+- Proper metadata configuration
+- Structured data markup
+- Sitemap generation
+- Open Graph tags
+
+### Security
+- Input validation and sanitization
+- Secure headers configuration
+- Environment variables protection
+- Regular dependency updates
+
+---
+
+**Note**: This structure follows Next.js 15 best practices and is designed for scalability and maintainability. Update as the project evolves!
